@@ -27,7 +27,7 @@ class TwitterSession
     JSON.parse(response)
   end
 
-  def self.post(path, req_params)3
+  def self.post(path, req_params = nil)3
     uri_post = path_to_url(path, req_params)
     response = access_token.post(uri_post).body
     JSON.parse(response)

@@ -1,3 +1,6 @@
+require 'twitter_session'
+require 'open-uri'
+
 def internet_connection?
   begin
     true if open("http://www.twitter.com/")
@@ -14,7 +17,7 @@ class Status < ActiveRecord::Base
   def self.fetch_by_twitter_user_id!(twitter_user_id)
     #NOTE: only pulls 20 most recent statuses for user
     json_statuses = TwitterSession.get("statuses/user_timeline",
-                    { :user_id => twitter_user_id })
+                    { :user_id => twitter_user_id } )
     self.parse_json(json_statuses, twitter_user_id)
   end
 
