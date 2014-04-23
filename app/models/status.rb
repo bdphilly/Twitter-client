@@ -1,3 +1,12 @@
+def internet_connection?
+  begin
+    true if open("http://www.twitter.com/")
+  rescue => e
+    puts e
+    false
+  end
+end
+
 class Status < ActiveRecord::Base
   validates :twitter_status_id, :body, :twitter_user_id, presence: true
   validates :twitter_status_id, uniqueness: true
@@ -34,6 +43,14 @@ class Status < ActiveRecord::Base
     TwitterSession.post('statuses/update',
                         { :status => body })
     self.fetch_by_twitter_user_id!(twitter_user_id)
+  end
+
+  def self.get_by_twitter_user_id(twitter_user_id)
+    if internet_connection?
+      fetch_by_twitter_user_id!(twitter_user_id)
+    end
+
+    where(:twitter_user_id => twitter_user_id)
   end
 
 end
